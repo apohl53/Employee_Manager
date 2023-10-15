@@ -27,6 +27,9 @@ function askQuestions() {
         "add department",
         "add role",
         "update employee role",
+        "delete employee",
+        "delete role",
+        "delete department",
         "QUIT",
       ],
       name: "choice",
@@ -56,6 +59,18 @@ function askQuestions() {
 
         case "update employee role":
           updateEmployeeRole();
+          break;
+
+        case "delete employee":
+          deleteEmployee();
+          break;
+
+        case "delete role":
+          deleteRole();
+          break;
+
+        case "delete department":
+          deleteDepartment();
           break;
 
         default:
@@ -193,5 +208,84 @@ function updateEmployeeRole() {
         }
       );
       askQuestions();
+    });
+}
+
+function deleteEmployee() {
+  inquirer
+    .prompt([
+      {
+        message:
+          "Which employee would you like to delete? (Use first name only)",
+        type: "input",
+        name: "name",
+      },
+    ])
+    .then(function (response) {
+      connection.query(
+        "DELETE FROM employee WHERE first_name = ?",
+        [response.name],
+        function (err, data) {
+          if (err) {
+            console.error("Error deleting employee:", err);
+            return;
+          }
+
+          console.log("Employee deleted successfully");
+          askQuestions();
+        }
+      );
+    });
+}
+
+function deleteDepartment() {
+  inquirer
+    .prompt([
+      {
+        message: "Which department would you like to delete?",
+        type: "input",
+        name: "name",
+      },
+    ])
+    .then(function (response) {
+      connection.query(
+        "DELETE FROM department WHERE name = ?",
+        [response.name],
+        function (err, data) {
+          if (err) {
+            console.error("Error deleting department:", err);
+            return;
+          }
+
+          console.log("Employee deleted successfully");
+          askQuestions();
+        }
+      );
+    });
+}
+
+function deleteRole() {
+  inquirer
+    .prompt([
+      {
+        message: "Which role would you like to delete?",
+        type: "input",
+        name: "name",
+      },
+    ])
+    .then(function (response) {
+      connection.query(
+        "DELETE FROM role WHERE title = ?",
+        [response.name],
+        function (err, data) {
+          if (err) {
+            console.error("Error deleting role:", err);
+            return;
+          }
+
+          console.log("Role deleted successfully");
+          askQuestions();
+        }
+      );
     });
 }
